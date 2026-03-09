@@ -29,8 +29,8 @@ export default function Admin() {
         statut: filterStatut || undefined,
         limit: 50,
       });
-      setCandidatures(res.data.data);
-      setTotal(res.data.total);
+      setCandidatures(res.data.data || []);
+setTotal(res.data.total || 0);
     } catch (err) {
       console.error(err);
     } finally {
@@ -161,6 +161,7 @@ export default function Admin() {
                     ))}
                   </tbody>
                 </table>
+
               </div>
             )}
           </>
