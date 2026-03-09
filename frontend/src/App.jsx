@@ -8,28 +8,29 @@ import './index.css';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
-  if (loading) return <div className="loading-spinner" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>🎋</div>;
+  if (loading) return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>🎋</div>;
   if (!user) return <Navigate to="/admin/login" replace />;
   return children;
+}
+
+function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<><Navbar /><Home /></>} />
+      <Route path="/admin/login" element={<Login />} />
+      <Route path="/admin" element={
+        <ProtectedRoute><Admin /></ProtectedRoute>
+      } />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
 }
 
 function AppLayout() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          {/* Public site */}
-          <Route path="/" element={<><Navbar /><Home /></>} />
-
-          {/* Admin */}
-          <Route path="/admin/login" element={<Login />} />
-          <Route path="/admin" element={
-            <ProtectedRoute><Admin /></ProtectedRoute>
-          } />
-
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <AppRoutes />
       </AuthProvider>
     </BrowserRouter>
   );
