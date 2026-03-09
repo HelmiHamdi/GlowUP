@@ -92,7 +92,7 @@ export default function ProduitsAdmin() {
       const params = {};
       if (filterCat) params.categorie = filterCat;
       const res = await produitAPI.getAll(params);
-      setProduits(res.data.data);
+     setProduits(res.data.data || []);
     } catch (err) {
       console.error(err);
     } finally {

@@ -111,7 +111,7 @@ export default function MedecinsAdmin() {
       if (filterCat)     params.categorie = filterCat;
       if (search.trim()) params.search    = search.trim();
       const res = await medecinAPI.getAll(params);
-      setMedecins(res.data.data);
+      setMedecins(res.data.data || []);
     } catch (err) {
       console.error(err);
     } finally {

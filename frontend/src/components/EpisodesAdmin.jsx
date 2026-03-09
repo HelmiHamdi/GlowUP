@@ -105,7 +105,7 @@ export default function EpisodesAdmin() {
       const params = {};
       if (filterSaison) params.saison = filterSaison;
       const res = await episodeAPI.getAll(params);
-      setEpisodes(res.data.data);
+     setEpisodes(res.data.data || []);
     } catch (err) {
       console.error(err);
     } finally {
