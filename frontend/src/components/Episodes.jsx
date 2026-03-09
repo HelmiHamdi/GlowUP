@@ -78,7 +78,7 @@ export default function Episodes() {
 
   useEffect(() => {
     episodeAPI.getAll({ saison: 1 })
-      .then((res) => setEpisodes(res.data.data))
+      .then((res) => setEpisodes(res.data.data || []))
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);

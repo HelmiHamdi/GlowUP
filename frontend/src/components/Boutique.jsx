@@ -15,7 +15,7 @@ export default function Boutique() {
 
   useEffect(() => {
     produitAPI.getAll()
-      .then((res) => setProduits(res.data.data))
+      .then((res) => setProduits(res.data.data || []))
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
