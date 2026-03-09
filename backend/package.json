@@ -4,13 +4,13 @@
   "description": "BambooGlow API - MERN Stack",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-     "dev": "nodemon --env-file=.env server.js"
+    "start": "node server.js && npx serve -s build",
+    "dev": "nodemon --env-file=.env server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-   "type": "module",
+  "type": "module",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
@@ -19,7 +19,8 @@
     "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.3",
-    "nodemailer": "^6.9.7"
+    "nodemailer": "^6.9.7",
+    "serve": "^14.2.6"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
