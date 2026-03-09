@@ -13,8 +13,13 @@ router.post(
     body('age').isInt({ min: 18, max: 75 }).withMessage('Âge invalide (18-75)'),
     body('email').isEmail().withMessage('Email invalide'),
     body('telephone').notEmpty().withMessage('Le téléphone est obligatoire'),
-    body('ville').isIn(['Tunis', 'Sfax', 'Sousse', 'Autre']).withMessage('Ville invalide'),
-    body('motivation').isLength({ min: 50 }).withMessage('Décrivez-vous en au moins 50 caractères'),
+   body('ville').isIn([
+  'Tunis', 'Ariana', 'Ben Arous', 'Manouba', 'Nabeul', 'Zaghouan',
+  'Bizerte', 'Béja', 'Jendouba', 'Le Kef', 'Siliana', 'Kairouan',
+  'Kasserine', 'Sidi Bouzid', 'Sousse', 'Monastir', 'Mahdia', 'Sfax',
+  'Gafsa', 'Tozeur', 'Kébili', 'Gabès', 'Médenine', 'Tataouine'
+]).withMessage('Ville invalide'),
+    body('motivation').isLength({ min: 20 }).withMessage('Décrivez-vous en au moins 50 caractères'),
   ],
   async (req, res) => {
     const errors = validationResult(req);
