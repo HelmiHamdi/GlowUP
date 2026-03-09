@@ -38,7 +38,7 @@ export default function Medecins() {
 
     setLoading(true);
     medecinAPI.getAll(params)
-      .then((res) => setMedecins(res.data.data))
+      .then((res) => setMedecins(res.data.data || []))
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [categorie, search]);
