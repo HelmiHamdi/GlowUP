@@ -8,8 +8,8 @@
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm start",
     "seed": "cd backend && node seed.js",
-    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build && npm run start:backend",
-    "start": "npm run start --prefix backend"
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "node backend/server.js"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
