@@ -1,0 +1,288 @@
+/* Admin layout */
+.admin-page { min-height: 100vh; background: #f5f5f0; }
+.admin-nav {
+  background: var(--ink); padding: 0 2rem; height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid rgba(122,158,126,0.2); position: sticky; top: 0; z-index: 10;
+}
+.admin-logo { font-family: 'Italiana', serif; font-size: 1.3rem; color: var(--white); }
+.admin-nav-right { display: flex; align-items: center; gap: 1rem; }
+.admin-user { font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+.admin-logout {
+  background: rgba(201,122,94,0.15); color: var(--terra); border: 1px solid rgba(201,122,94,0.3);
+  padding: 0.4rem 1rem; border-radius: 4px; font-size: 0.78rem; cursor: pointer;
+  font-family: 'Outfit', sans-serif; transition: all 0.2s;
+}
+.admin-logout:hover { background: var(--terra); color: white; }
+.admin-content { padding: 2rem; max-width: 1400px; margin: 0 auto; }
+.admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+.admin-header h1 { font-size: 1.4rem; font-weight: 600; }
+.admin-header h1 span { color: var(--sage); font-size: 1rem; }
+.admin-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.filter-pill {
+  padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500;
+  border: 1px solid rgba(0,0,0,0.12); background: white; cursor: pointer;
+  font-family: 'Outfit', sans-serif; transition: all 0.2s;
+}
+.filter-pill.active { background: var(--ink); color: white; border-color: var(--ink); }
+.admin-table-wrap { background: white; border-radius: 8px; overflow: auto; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.admin-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+.admin-table th {
+  background: var(--cream); padding: 0.9rem 1rem; text-align: left;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.admin-table td { padding: 0.8rem 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); vertical-align: middle; }
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table tr:hover td { background: #fafaf8; }
+.td-name { font-weight: 600; }
+.td-email { color: var(--sage); }
+.td-motiv { max-width: 200px; color: var(--soft); }
+.td-date { color: var(--muted); white-space: nowrap; }
+.statut-select {
+  border: 1px solid; border-radius: 4px; padding: 0.3rem 0.6rem;
+  font-family: 'Outfit', sans-serif; font-size: 0.75rem; font-weight: 500;
+  background: white; cursor: pointer; outline: none;
+}
+.admin-empty { text-align: center; color: var(--muted); padding: 4rem; font-size: 0.9rem; }
+
+/* Login page */
+.login-page {
+  min-height: 100vh; background: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+}
+.login-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px; padding: 2.5rem; width: 100%; max-width: 380px;
+}
+.login-title {
+  font-family: 'Italiana', serif; font-size: 2rem; color: var(--white);
+  text-align: center; margin-bottom: 0.3rem;
+}
+.login-title span { color: var(--sage-l); }
+.login-sub { font-size: 0.78rem; color: rgba(255,255,255,0.3); text-align: center; margin-bottom: 2rem; }
+/* ── Variables ─────────────────────────────────────────────────────────────── */
+:root {
+  --gold:    #c8a96e;
+  --gold-dk: #a88040;
+  --dark:    #2d2d2d;
+  --muted:   #888;
+  --bg:      #f9f6f0;
+  --white:   #ffffff;
+  --border:  #e8e0d0;
+}
+
+/* ── Page ──────────────────────────────────────────────────────────────────── */
+.admin-page {
+  min-height: 100vh;
+  background: var(--bg);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: var(--dark);
+}
+
+/* ── Navbar ────────────────────────────────────────────────────────────────── */
+.admin-nav {
+  background: var(--white);
+  border-bottom: 1.5px solid var(--border);
+  padding: 0 2rem;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,.05);
+}
+
+.admin-logo {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--dark);
+  letter-spacing: -.02em;
+}
+
+.admin-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-user {
+  font-size: .85rem;
+  color: var(--muted);
+}
+
+.admin-logout {
+  background: #f5f0e8;
+  border: none;
+  padding: .45rem 1rem;
+  border-radius: 7px;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #555;
+  transition: background .2s;
+}
+.admin-logout:hover { background: #ede5d0; }
+
+/* ── Onglets ───────────────────────────────────────────────────────────────── */
+.admin-tabs {
+  background: var(--white);
+  border-bottom: 1.5px solid var(--border);
+  padding: 0 2rem;
+  display: flex;
+  gap: 0;
+}
+
+.admin-tab {
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: .9rem 1.4rem;
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color .2s, border-color .2s;
+  margin-bottom: -1.5px;
+}
+
+.admin-tab:hover { color: var(--dark); }
+
+.admin-tab.active {
+  color: var(--gold-dk);
+  border-bottom-color: var(--gold);
+}
+
+/* ── Contenu ───────────────────────────────────────────────────────────────── */
+.admin-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* ── Header candidatures ───────────────────────────────────────────────────── */
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.admin-header h1 span {
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 400;
+  margin-left: .3rem;
+}
+
+/* ── Filtres pills ─────────────────────────────────────────────────────────── */
+.admin-filters {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  background: #f5f0e8;
+  border: none;
+  padding: .45rem 1rem;
+  border-radius: 20px;
+  font-size: .85rem;
+  color: #555;
+  cursor: pointer;
+  transition: all .2s;
+  font-weight: 500;
+}
+.filter-pill.active,
+.filter-pill:hover {
+  background: var(--gold);
+  color: #fff;
+}
+
+/* ── Tableau candidatures ──────────────────────────────────────────────────── */
+.admin-table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,.07);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+  font-size: .9rem;
+}
+
+.admin-table thead { background: #faf7f2; }
+
+.admin-table th {
+  padding: .9rem 1rem;
+  text-align: left;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  white-space: nowrap;
+}
+
+.admin-table td {
+  padding: .85rem 1rem;
+  border-top: 1px solid #f0ece3;
+  vertical-align: middle;
+}
+
+.admin-table tr:hover td { background: #fdf9f2; }
+
+.td-name  { font-weight: 600; }
+.td-email { color: #555; font-size: .88rem; }
+.td-motiv { color: #666; font-size: .85rem; max-width: 260px; }
+.td-date  { white-space: nowrap; color: var(--muted); font-size: .85rem; }
+
+/* ── Select statut ─────────────────────────────────────────────────────────── */
+.statut-select {
+  border: 2px solid var(--border);
+  border-radius: 7px;
+  padding: .35rem .7rem;
+  font-size: .85rem;
+  font-weight: 600;
+  background: #fafaf8;
+  cursor: pointer;
+  outline: none;
+  color: #333;
+}
+.statut-select:focus { outline: none; }
+
+/* ── États vides / loading ─────────────────────────────────────────────────── */
+.loading-spinner {
+  text-align: center;
+  padding: 4rem;
+  font-size: 2.5rem;
+  animation: spin 1.5s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.admin-empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 3rem;
+  font-size: 1rem;
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .admin-content { padding: 1rem; }
+  .admin-nav     { padding: 0 1rem; }
+  .admin-tabs    { padding: 0 1rem; }
+  .admin-header  { flex-direction: column; align-items: flex-start; }
+}

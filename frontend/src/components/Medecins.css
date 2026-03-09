@@ -1,0 +1,53 @@
+.medecins-section { background: var(--cream); padding: 6rem 4rem; }
+.med-search { display: flex; gap: 0.8rem; margin: 2rem 0; flex-wrap: wrap; align-items: center; }
+.search-input {
+  flex: 1; min-width: 200px; background: var(--white);
+  border: 1px solid rgba(0,0,0,0.1); border-radius: 4px;
+  padding: 0.7rem 1rem; font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem; color: var(--ink); outline: none;
+}
+.search-input:focus { border-color: var(--sage); }
+.filter-btn {
+  padding: 0.7rem 1.2rem; border-radius: 4px; font-size: 0.75rem;
+  font-weight: 500; letter-spacing: 0.06em; cursor: pointer;
+  font-family: 'Outfit', sans-serif; transition: all 0.2s;
+  border: 1px solid rgba(0,0,0,0.1); background: var(--white);
+}
+.filter-btn.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.filter-btn:hover:not(.active) { border-color: var(--sage); }
+
+.med-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.2rem; }
+.med-card {
+  background: var(--white); border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 8px; overflow: hidden; transition: all 0.25s; cursor: pointer;
+}
+.med-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.08); }
+.med-avatar {
+  height: 100px; display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem; position: relative;
+}
+.med-badge {
+  position: absolute; top: 0.6rem; right: 0.6rem;
+  font-size: 0.6rem; font-weight: 600; letter-spacing: 0.1em;
+  padding: 0.2rem 0.6rem; border-radius: 20px; text-transform: uppercase;
+}
+.badge-dentiste { background: rgba(122,158,126,0.15); color: var(--sage); }
+.badge-medecin { background: rgba(200,169,110,0.15); color: var(--gold); }
+.badge-esth { background: rgba(201,122,94,0.15); color: var(--terra); }
+.med-body { padding: 1rem 1.2rem 1.4rem; }
+.med-name { font-weight: 600; font-size: 0.92rem; margin-bottom: 0.15rem; }
+.med-spec { font-size: 0.72rem; color: var(--sage); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.4rem; }
+.med-addr { font-size: 0.78rem; color: var(--muted); font-weight: 300; }
+.med-rating { display: flex; align-items: center; gap: 0.3rem; margin-top: 0.6rem; }
+.stars { color: var(--gold); font-size: 0.75rem; }
+.rating-num { font-size: 0.72rem; color: var(--muted); font-weight: 300; }
+.med-btn {
+  display: block; width: calc(100% - 2.4rem); margin: 0 1.2rem 1.2rem;
+  background: var(--sage-p); color: var(--sage); border: none;
+  padding: 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
+  font-family: 'Outfit', sans-serif; transition: all 0.2s;
+}
+.med-btn:hover { background: var(--sage); color: var(--white); }
+@media (max-width: 900px) { .medecins-section { padding: 4rem 1.5rem; } .med-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 580px) { .med-grid { grid-template-columns: 1fr; } }

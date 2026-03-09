@@ -1,0 +1,63 @@
+.candidature-section {
+  background: var(--ink); position: relative; overflow: hidden; padding: 6rem 4rem;
+}
+.candidature-section::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(122,158,126,0.1) 0%, transparent 60%);
+}
+.cand-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
+  align-items: center; position: relative; z-index: 2;
+}
+.cand-info .s-body { color: rgba(255,255,255,0.45); }
+.cand-steps { margin-top: 2rem; display: flex; flex-direction: column; gap: 1.2rem; }
+.cand-step { display: flex; gap: 1rem; align-items: flex-start; }
+.step-num {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(122,158,126,0.15); border: 1px solid rgba(122,158,126,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem; font-weight: 600; color: var(--sage-l); flex-shrink: 0;
+}
+.step-text h4 { font-size: 0.88rem; font-weight: 500; color: var(--white); margin-bottom: 0.15rem; }
+.step-text p { font-size: 0.78rem; font-weight: 300; color: rgba(255,255,255,0.4); line-height: 1.5; }
+
+.cand-form {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px; padding: 2rem;
+}
+.form-title {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.6rem;
+  font-weight: 500; color: var(--white); margin-bottom: 0.3rem;
+}
+.form-sub { font-size: 0.78rem; font-weight: 300; color: rgba(255,255,255,0.35); margin-bottom: 1.5rem; }
+.form-group { margin-bottom: 1rem; position: relative; }
+.form-group label {
+  display: block; font-size: 0.68rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.35); margin-bottom: 0.4rem;
+}
+.form-group input, .form-group textarea, .form-group select {
+  width: 100%; background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 4px;
+  padding: 0.7rem 1rem; font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem; color: var(--white); outline: none; transition: border-color 0.2s;
+}
+.form-group select option { background: var(--ink); }
+.form-group input:focus, .form-group textarea:focus { border-color: var(--sage); }
+.form-group textarea { min-height: 80px; resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+.field-err { font-size: 0.72rem; color: var(--terra); margin-top: 0.25rem; display: block; }
+.char-count { font-size: 0.68rem; color: rgba(255,255,255,0.2); margin-top: 0.25rem; display: block; text-align: right; }
+.form-submit {
+  width: 100%; background: var(--sage); color: var(--white); border: none;
+  padding: 0.9rem; border-radius: 4px; font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; cursor: pointer; transition: background 0.2s; margin-top: 0.5rem;
+}
+.form-submit:hover:not(:disabled) { background: var(--gold); }
+.form-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+@media (max-width: 900px) {
+  .candidature-section { padding: 4rem 1.5rem; }
+  .cand-grid { grid-template-columns: 1fr; gap: 3rem; }
+}

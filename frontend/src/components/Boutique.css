@@ -1,0 +1,57 @@
+.boutique-section { background: var(--white); padding: 6rem 4rem; }
+.boutique-section .s-label { color: var(--gold); }
+.boutique-banner {
+  background: var(--ink); border-radius: 8px; padding: 2rem 2.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;
+}
+.boutique-banner h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 500; color: var(--white); }
+.boutique-banner p { font-size: 0.8rem; color: rgba(255,255,255,0.4); font-weight: 300; margin-top: 0.3rem; }
+.banner-btn {
+  background: var(--gold); color: var(--ink); border: none;
+  padding: 0.7rem 1.8rem; border-radius: 30px; font-size: 0.78rem;
+  font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  cursor: pointer; font-family: 'Outfit', sans-serif; white-space: nowrap;
+}
+.prod-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.2rem; margin-top: 2.5rem; }
+.prod-card {
+  background: var(--cream); border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 6px; overflow: hidden; transition: all 0.2s; cursor: pointer;
+}
+.prod-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.07); }
+.prod-img {
+  height: 140px; display: flex; align-items: center; justify-content: center;
+  font-size: 3rem; position: relative;
+}
+.prod-tag {
+  position: absolute; top: 0.5rem; left: 0.5rem;
+  font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em;
+  padding: 0.2rem 0.55rem; border-radius: 3px; text-transform: uppercase;
+}
+
+/* BambooGlow tag — fond sombre, texte doré */
+.tag-bamboo { background: var(--ink); color: var(--gold); }
+
+/* Nouveau tag — vert */
+.tag-nouveau { background: #3d8b5e; color: #ffffff; }
+
+/* Promo tag — rouge/coral avec le % calculé */
+.tag-promo { background: #e63946; color: #ffffff; }
+
+.prod-body { padding: 0.9rem 1rem 1.1rem; }
+.prod-brand { font-size: 0.62rem; font-weight: 600; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.2rem; }
+.prod-name { font-weight: 500; font-size: 0.85rem; margin-bottom: 0.5rem; line-height: 1.3; }
+.prod-price { display: flex; align-items: center; gap: 0.5rem; }
+.price-main { font-weight: 700; font-size: 0.95rem; }
+.price-old { font-size: 0.75rem; color: var(--muted); text-decoration: line-through; }
+.prod-add {
+  width: 100%; margin-top: 0.7rem; background: var(--ink); color: var(--white);
+  border: none; padding: 0.5rem; border-radius: 3px; font-size: 0.7rem;
+  font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  cursor: pointer; font-family: 'Outfit', sans-serif; transition: background 0.2s;
+}
+.prod-add:hover:not(:disabled) { background: var(--sage); }
+.prod-add.added { background: var(--sage); }
+.prod-add:disabled { cursor: default; }
+@media (max-width: 900px) { .boutique-section { padding: 4rem 1.5rem; } .prod-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 580px) { .prod-grid { grid-template-columns: 1fr; } }

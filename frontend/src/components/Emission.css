@@ -1,0 +1,28 @@
+.emission-section { background: var(--white); padding: 6rem 4rem; }
+.emission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-top: 3rem; }
+.ep-cards { display: flex; flex-direction: column; gap: 0.8rem; }
+.ep-card {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1rem 1.2rem; background: var(--cream);
+  border: 1px solid rgba(0,0,0,0.06); border-radius: 6px; transition: all 0.2s; cursor: pointer;
+}
+.ep-card:hover { border-color: var(--sage); transform: translateX(4px); }
+.ep-icon { font-size: 1.4rem; width: 40px; text-align: center; flex-shrink: 0; }
+.ep-num { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; color: var(--sage); text-transform: uppercase; margin-bottom: 0.15rem; }
+.ep-title { font-weight: 500; font-size: 0.9rem; }
+.ep-sub { font-size: 0.75rem; color: var(--muted); font-weight: 300; }
+.ep-arrow { margin-left: auto; color: var(--sage); font-size: 0.8rem; opacity: 0; transition: opacity 0.2s; }
+.ep-card:hover .ep-arrow { opacity: 1; }
+.finale-card { background: var(--ink); border: none; margin-top: 0.4rem; }
+.finale-card .ep-num { color: var(--gold); }
+.finale-card .ep-title { color: var(--white); }
+.finale-card .ep-sub { color: rgba(255,255,255,0.4); }
+.emission-info h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 500; margin-bottom: 1rem; line-height: 1.2; }
+.emission-info p { font-size: 0.88rem; font-weight: 300; color: var(--soft); line-height: 1.8; margin-bottom: 1rem; }
+.emission-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: var(--sage-p); padding: 0.4rem 1rem; border-radius: 30px;
+  font-size: 0.72rem; font-weight: 500; color: var(--sage);
+  margin-right: 0.5rem; margin-bottom: 0.5rem;
+}
+@media (max-width: 900px) { .emission-section { padding: 4rem 1.5rem; } .emission-grid { grid-template-columns: 1fr; } }
