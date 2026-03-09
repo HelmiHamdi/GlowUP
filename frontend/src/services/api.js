@@ -1,7 +1,8 @@
 import axios from 'axios';
 
+ const API_BASE_URL="https://glowup-zohc.onrender.com/api";
 const api = axios.create({
-   baseURL: import.meta.env.MODE === "development" ? "https://glowup-zohc.onrender.com/api" : "/api",
+   baseURL: API_BASE_URL,
   withCredentials: true,
   timeout: 10000,
 });
