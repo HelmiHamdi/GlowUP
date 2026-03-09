@@ -12,7 +12,9 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "bambooglow": "file:..",
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.22.1",
