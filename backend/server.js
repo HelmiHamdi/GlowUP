@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
+import { fileURLToPath } from "url";
 import { connect } from "mongoose";
 
 import authRoutes from "./routes/auth.js";
@@ -13,9 +14,12 @@ import episodesRouter from "./routes/episodes.js";
 
 dotenv.config();
 
+// ── Fix __dirname ES Modules ──
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename); // → /backend
+
 const app = express();
 const PORT = process.env.PORT;
-const __dirname = path.resolve();
 
 // ── Middleware ──
 app.use(express.json({ limit: '10mb' }));
@@ -38,7 +42,7 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "OK", message: "🎋 BambooGlow API is running" });
 });
 
-// ── Serve frontend (toujours, pas de condition) ──
+// ── Serve frontend ──
 app.use(express.static(path.join(__dirname, "../frontend/build")));
 app.get("/{*any}", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend", "build", "index.html"));
