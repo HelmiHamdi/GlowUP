@@ -61,3 +61,126 @@
   .candidature-section { padding: 4rem 1.5rem; }
   .cand-grid { grid-template-columns: 1fr; gap: 3rem; }
 }
+/* ─────────────────────────────────────────────────────────────────────────
+   Candidature.css — Ajouter ces blocs à votre fichier CSS existant
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* ── Zone de dépôt photo ─────────────────────────────────────────────────── */
+.photo-upload-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 1.8rem 1rem;
+  border: 2px dashed rgba(200, 169, 110, 0.45); /* --sage / gold tone */
+  border-radius: 12px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.03);
+  transition: border-color 0.2s, background 0.2s;
+  text-align: center;
+}
+
+.photo-upload-zone:hover {
+  border-color: rgba(200, 169, 110, 0.8);
+  background: rgba(200, 169, 110, 0.05);
+}
+
+.photo-upload-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.photo-upload-text {
+  font-size: 0.88rem;
+  color: var(--white, #fff);
+  opacity: 0.85;
+  font-weight: 500;
+}
+
+.photo-upload-hint {
+  font-size: 0.75rem;
+  color: var(--white, #fff);
+  opacity: 0.45;
+}
+
+/* ── Prévisualisation photo ──────────────────────────────────────────────── */
+.photo-preview-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.photo-preview-img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;          /* Cercle pour donner un aspect avatar */
+  border: 3px solid rgba(200, 169, 110, 0.6);
+  display: block;
+}
+
+.photo-remove-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;           /* Ajuster selon l'offset si la photo est grande */
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: #c97a5e;
+  color: #fff;
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background 0.15s;
+  /* Repositionner par rapport à l'image de 120px */
+  left: 98px;
+  top: -4px;
+}
+
+.photo-remove-btn:hover {
+  background: #a85c43;
+}
+
+.photo-file-name {
+  font-size: 0.72rem;
+  opacity: 0.55;
+  color: var(--white, #fff);
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Barre de progression upload ─────────────────────────────────────────── */
+.upload-progress-wrap {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.upload-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #c8a96e, #7a9e7e);
+  border-radius: 99px;
+  transition: width 0.2s ease;
+}
+
+.upload-progress-label {
+  position: absolute;
+  right: 0;
+  top: 10px;
+  font-size: 0.72rem;
+  opacity: 0.6;
+  color: var(--white, #fff);
+}

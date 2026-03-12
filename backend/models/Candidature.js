@@ -28,14 +28,36 @@ const candidatureSchema = new Schema({
   ville: {
     type: String,
     required: [true, 'La ville est obligatoire'],
-    enum: ['Tunis', 'Sfax', 'Sousse', 'Autre'],
+    enum: [
+      'Tunis', 'Ariana', 'Ben Arous', 'Manouba', 'Nabeul', 'Zaghouan',
+      'Bizerte', 'Béja', 'Jendouba', 'Le Kef', 'Siliana', 'Kairouan',
+      'Kasserine', 'Sidi Bouzid', 'Sousse', 'Monastir', 'Mahdia', 'Sfax',
+      'Gafsa', 'Tozeur', 'Kébili', 'Gabès', 'Médenine', 'Tataouine',
+    ],
   },
   motivation: {
     type: String,
     required: [true, 'La motivation est obligatoire'],
-    minlength: [50, 'Décrivez-vous en au moins 50 caractères'],
+    minlength: [20, 'Décrivez-vous votre motivation'],
     maxlength: [1000, '1000 caractères maximum'],
   },
+
+  // ── Champ image (Cloudinary) ──────────────────────────────────────────────
+  photo: {
+    url: {
+      type: String,
+      default: null,
+      // URL publique Cloudinary, ex: https://res.cloudinary.com/.../image.jpg
+    },
+    publicId: {
+      type: String,
+      default: null,
+      // ID Cloudinary pour pouvoir supprimer l'image plus tard si besoin
+      // ex: "bambooglow/candidatures/abc123"
+    },
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+
   saison: {
     type: Number,
     default: 3,
