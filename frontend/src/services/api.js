@@ -5,9 +5,9 @@ const api = axios.create({
   baseURL:
     import.meta.env.MODE === 'development'
       ? 'http://localhost:5050/api'
-      : '/api',
+      : 'https://glowup-zohc.onrender.com/api',
   withCredentials: true,
-  timeout: 30000, // 30s pour laisser le temps à l'upload image
+  timeout: 30000,
 });
 
 // ── Attacher le JWT automatiquement ─────────────────────────────────────────
