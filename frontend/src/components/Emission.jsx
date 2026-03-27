@@ -3,8 +3,7 @@ import './Emission.css';
 const EPISODES = [
   { num: '01', icon: '🦷', titre: 'Le Sourire Bamboo', sub: 'Dentisterie & soin buccal' },
   { num: '02', icon: '🩺', titre: "L'Énergie du Dedans", sub: 'Médecine & bien-être global' },
-  { num: '03', icon: '✨', titre: 'La Peau qui Rayonne', sub: 'Esthétique & beauté' },
-  { num: '04', icon: '🛍️', titre: 'La Garde-Robe du Glow', sub: 'Shopping & style personnel' },
+  { num: '03', icon: '✨', titre: 'La Peau qui Rayonne', sub: 'Esthétique & beauté' },  
 ];
 
 export default function Emission() {

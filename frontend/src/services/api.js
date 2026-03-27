@@ -79,11 +79,39 @@ export const candidatureAPI = {
 };
 
 export const medecinAPI = {
-  getAll:  (params)   => api.get('/medecins', { params }),
-  getById: (id)       => api.get(`/medecins/${id}`),
-  create:  (data)     => api.post('/medecins', data),
-  update:  (id, data) => api.put(`/medecins/${id}`, data),
-  delete:  (id)       => api.delete(`/medecins/${id}`),
+  getAll:  (params) => api.get('/medecins', { params }),
+  getById: (id)     => api.get(`/medecins/${id}`),
+
+  /**
+   * Créer un médecin avec photo optionnelle.
+   * On envoie en multipart/form-data si une photo est fournie,
+   * sinon en JSON classique.
+   */
+  create: (data, photoFile = null) => {
+    if (!photoFile) return api.post('/medecins', data);
+
+    const formData = new FormData();
+    Object.entries(data).forEach(([k, v]) => formData.append(k, v));
+    formData.append('photo', photoFile);
+    return api.post('/medecins', formData);
+  },
+
+  /**
+   * Modifier un médecin.
+   * - photoFile : nouveau fichier image (remplace l'ancienne)
+   * - removePhoto : true → supprime la photo sans en mettre une nouvelle
+   */
+  update: (id, data, photoFile = null, removePhoto = false) => {
+    if (!photoFile && !removePhoto) return api.put(`/medecins/${id}`, data);
+
+    const formData = new FormData();
+    Object.entries(data).forEach(([k, v]) => formData.append(k, v));
+    if (photoFile) formData.append('photo', photoFile);
+    if (removePhoto) formData.append('removePhoto', 'true');
+    return api.put(`/medecins/${id}`, formData);
+  },
+
+  delete: (id) => api.delete(`/medecins/${id}`),
 };
 
 export const produitAPI = {

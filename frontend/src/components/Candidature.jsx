@@ -292,7 +292,7 @@ export default function Candidature() {
                     >
                       <span className="photo-upload-icon">📸</span>
                       <span className="photo-upload-text">
-                        Cliquez ou glissez une photo
+                        Glissez une photo
                       </span>
                       <span className="photo-upload-hint">
                         JPG, PNG, WEBP · max 5 Mo

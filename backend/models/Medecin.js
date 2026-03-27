@@ -15,13 +15,17 @@ const medecinSchema = new Schema({
     enum: ['dentiste', 'medecin', 'esthetique'],
     required: true,
   },
+  gouvernorat: {
+    type: String,
+    required: true,          // ex: "Tunis", "Sfax"
+  },
   ville: {
     type: String,
-    required: true,
+    required: true,          // garde la compatibilité — on y met aussi le gouvernorat
   },
   adresse: {
     type: String,
-    required: true,
+    required: true,          // délégation / quartier ex: "La Marsa"
   },
   telephone: String,
   email: String,
@@ -43,6 +47,10 @@ const medecinSchema = new Schema({
     type: String,
     default: 'linear-gradient(135deg,#e8f4e8,#d0e8d0)',
   },
+  photo: {
+    url:      { type: String, default: null },
+    publicId: { type: String, default: null },
+  },
   actif: {
     type: Boolean,
     default: true,
@@ -53,7 +61,6 @@ const medecinSchema = new Schema({
   },
 });
 
-// Index for search
-medecinSchema.index({ nom: 'text', specialite: 'text', ville: 'text' });
+medecinSchema.index({ nom: 'text', specialite: 'text', ville: 'text', gouvernorat: 'text' });
 
 export default model('Medecin', medecinSchema);
