@@ -29,7 +29,7 @@ export default function Hero() {
         <div className="hero-tagline">« Quand la vraie beauté reprend sa lumière. »</div>
         <div className="hero-sub">Dentiste · Médecin · Esthétique · Shopping · Révélation</div>
         <div className="hero-btns">
-          <button className="btn-primary" onClick={() => scrollTo('candidature')}>✨ Je veux mon Glow</button>
+          <button className="btn-primary" onClick={() => scrollTo('candidature')}>Je veux mon Glow</button>
           <button className="btn-outline" onClick={() => scrollTo('episodes')}>▶ Voir les épisodes</button>
         </div>
         <div className="hero-stats">

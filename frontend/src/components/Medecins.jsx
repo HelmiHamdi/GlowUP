@@ -115,7 +115,7 @@ export default function Medecins() {
                   </div>
 
                   {/* Infos */}
-                  {/* Infos */}
+                 
                   <div className="med-body">
                     <div className="med-name">{m.nom}</div>
                     <div className="med-spec">{m.specialite}</div>
@@ -140,7 +140,7 @@ export default function Medecins() {
                     </div>
                   </div>
 
-                  <button className="med-btn">Prendre RDV</button>
+                
                 </div>
               );
             })}

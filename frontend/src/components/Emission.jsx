@@ -13,7 +13,7 @@ export default function Emission() {
         <div className="emission-grid">
           <div>
             <div className="s-label">L'Émission</div>
-            <div className="s-title">4 épisodes.<br /><em>1 révélation.</em></div>
+            <div className="s-title">3 épisodes.<br /><em>1 révélation.</em></div>
             <div className="ep-cards">
               {EPISODES.map((ep) => (
                 <div className="ep-card" key={ep.num}>

@@ -31,7 +31,7 @@ export default function Home() {
       <Emission />
       <Candidature />
       <Medecins />
-      <Boutique />
+ {/* <Boutique /> */}
       <Episodes />
       <Footer />
     </>
