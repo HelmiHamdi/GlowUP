@@ -135,6 +135,22 @@
 }
 .med-btn:hover { background: var(--sage); color: var(--white); }
 
+.med-contact {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-weight: 300;
+  margin-top: 0.25rem;
+}
+
+.med-contact a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.med-contact a:hover {
+  color: var(--sage);
+  text-decoration: underline;
+}
 /* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 900px) {
   .medecins-section { padding: 4rem 1.5rem; }
