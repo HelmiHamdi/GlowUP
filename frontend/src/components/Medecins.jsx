@@ -3,16 +3,16 @@ import { medecinAPI } from "../services/api";
 import "./Medecins.css";
 
 const CATEGORIES = [
-  { key: "tous",       label: "Tous"           },
-  { key: "dentiste",   label: "🦷 Dentistes"   },
-  { key: "medecin",    label: "🧖‍♀️ Artiste"    },
-  { key: "esthetique", label: "✨ Esthétique"  },
+  { key: "tous", label: "Tous" },
+  { key: "dentiste", label: "🦷 Dentistes" },
+  { key: "medecin", label: "🧖‍♀️ Artiste" },
+  { key: "esthetique", label: "✨ Esthétique" },
 ];
 
 const BADGE = {
-  dentiste:   { cls: "badge-dentiste", label: "Dentiste"    },
-  medecin:    { cls: "badge-medecin",  label: "Artiste"     },
-  esthetique: { cls: "badge-esth",     label: "Esthétique"  },
+  dentiste: { cls: "badge-dentiste", label: "Dentiste" },
+  medecin: { cls: "badge-medecin", label: "Artiste" },
+  esthetique: { cls: "badge-esth", label: "Esthétique" },
 };
 
 function Stars({ rating }) {
@@ -28,15 +28,15 @@ function Stars({ rating }) {
 }
 
 export default function Medecins() {
-  const [medecins,  setMedecins]  = useState([]);
-  const [loading,   setLoading]   = useState(true);
+  const [medecins, setMedecins] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [categorie, setCategorie] = useState("tous");
-  const [search,    setSearch]    = useState("");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const params = {};
     if (categorie !== "tous") params.categorie = categorie;
-    if (search.trim())        params.search    = search.trim();
+    if (search.trim()) params.search = search.trim();
 
     setLoading(true);
     medecinAPI
@@ -50,7 +50,9 @@ export default function Medecins() {
     <section className="medecins-section reveal" id="medecins">
       <div className="container">
         <div className="s-label">Annuaire</div>
-        <div className="s-title">Nos experts <em>partenaires</em></div>
+        <div className="s-title">
+          Nos experts <em>partenaires</em>
+        </div>
         <div className="s-body">
           Tous les professionnels qui participent à BambooGlow sont sélectionnés
           pour leur expertise et leur bienveillance.
@@ -80,7 +82,13 @@ export default function Medecins() {
         {loading ? (
           <div className="loading-spinner">🎋</div>
         ) : medecins.length === 0 ? (
-          <div style={{ textAlign: "center", color: "var(--muted)", padding: "3rem" }}>
+          <div
+            style={{
+              textAlign: "center",
+              color: "var(--muted)",
+              padding: "3rem",
+            }}
+          >
             Aucun résultat pour cette recherche.
           </div>
         ) : (
@@ -89,15 +97,10 @@ export default function Medecins() {
               const badge = BADGE[m.categorie] || BADGE.medecin;
               return (
                 <div className="med-card" key={m._id}>
-
                   {/* Zone image */}
                   <div className="med-img-wrap">
                     {m.photo?.url ? (
-                      <img
-                        src={m.photo.url}
-                        alt={m.nom}
-                        className="med-img"
-                      />
+                      <img src={m.photo.url} alt={m.nom} className="med-img" />
                     ) : (
                       <div
                         className="med-avatar-fallback"
@@ -112,12 +115,23 @@ export default function Medecins() {
                   </div>
 
                   {/* Infos */}
+                  {/* Infos */}
                   <div className="med-body">
                     <div className="med-name">{m.nom}</div>
                     <div className="med-spec">{m.specialite}</div>
                     <div className="med-addr">
                       📍 {m.gouvernorat || m.ville}, {m.adresse}
                     </div>
+                    {m.telephone && (
+                      <div className="med-contact">
+                        📞 <a href={`tel:${m.telephone}`}>{m.telephone}</a>
+                      </div>
+                    )}
+                    {m.email && (
+                      <div className="med-contact">
+                        ✉️ <a href={`mailto:${m.email}`}>{m.email}</a>
+                      </div>
+                    )}
                     <div className="med-rating">
                       <Stars rating={m.rating} />
                       <span className="rating-num">
