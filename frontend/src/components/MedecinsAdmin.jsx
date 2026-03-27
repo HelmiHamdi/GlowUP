@@ -32,7 +32,7 @@ const GOUVERNORATS = Object.keys(GOUVERNORATS_DATA).sort((a, b) => a.localeCompa
 const CATEGORIES   = ['dentiste', 'medecin', 'esthetique'];
 const CAT_LABELS   = {
   dentiste:   { label: '🦷 Dentiste',   color: '#5e9ec9' },
-  medecin:    { label: '🩺 Médecin',    color: '#7a9e7e' },
+  medecin:    { label: '🧖‍♀️ Artiste',    color: '#7a9e7e' },
   esthetique: { label: '✨ Esthétique', color: '#c9a05e' },
 };
 const AVATAR_OPTIONS = ['👨‍⚕️','👩‍⚕️','🦷','🧖‍♀️','🧑‍⚕️','💆‍♀️','🩺','💅','🧬'];

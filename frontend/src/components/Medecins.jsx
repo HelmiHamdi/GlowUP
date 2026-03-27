@@ -3,16 +3,16 @@ import { medecinAPI } from "../services/api";
 import "./Medecins.css";
 
 const CATEGORIES = [
-  { key: "tous", label: "Tous" },
-  { key: "dentiste", label: "🦷 Dentistes" },
-  { key: "medecin", label: "🩺 Médecins" },
-  { key: "esthetique", label: "✨ Esthétique" },
+  { key: "tous",       label: "Tous"           },
+  { key: "dentiste",   label: "🦷 Dentistes"   },
+  { key: "medecin",    label: "🧖‍♀️ Artiste"    },
+  { key: "esthetique", label: "✨ Esthétique"  },
 ];
 
 const BADGE = {
-  dentiste: { cls: "badge-dentiste", label: "Dentiste" },
-  medecin: { cls: "badge-medecin", label: "Médecin" },
-  esthetique: { cls: "badge-esth", label: "Esthétique" },
+  dentiste:   { cls: "badge-dentiste", label: "Dentiste"    },
+  medecin:    { cls: "badge-medecin",  label: "Artiste"     },
+  esthetique: { cls: "badge-esth",     label: "Esthétique"  },
 };
 
 function Stars({ rating }) {
@@ -28,15 +28,15 @@ function Stars({ rating }) {
 }
 
 export default function Medecins() {
-  const [medecins, setMedecins] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [medecins,  setMedecins]  = useState([]);
+  const [loading,   setLoading]   = useState(true);
   const [categorie, setCategorie] = useState("tous");
-  const [search, setSearch] = useState("");
+  const [search,    setSearch]    = useState("");
 
   useEffect(() => {
     const params = {};
     if (categorie !== "tous") params.categorie = categorie;
-    if (search.trim()) params.search = search.trim();
+    if (search.trim())        params.search    = search.trim();
 
     setLoading(true);
     medecinAPI
@@ -50,14 +50,13 @@ export default function Medecins() {
     <section className="medecins-section reveal" id="medecins">
       <div className="container">
         <div className="s-label">Annuaire</div>
-        <div className="s-title">
-          Nos experts <em>partenaires</em>
-        </div>
+        <div className="s-title">Nos experts <em>partenaires</em></div>
         <div className="s-body">
           Tous les professionnels qui participent à BambooGlow sont sélectionnés
           pour leur expertise et leur bienveillance.
         </div>
 
+        {/* ── Filtres ── */}
         <div className="med-search">
           <input
             className="search-input"
@@ -77,16 +76,11 @@ export default function Medecins() {
           ))}
         </div>
 
+        {/* ── Contenu ── */}
         {loading ? (
           <div className="loading-spinner">🎋</div>
         ) : medecins.length === 0 ? (
-          <div
-            style={{
-              textAlign: "center",
-              color: "var(--muted)",
-              padding: "3rem",
-            }}
-          >
+          <div style={{ textAlign: "center", color: "var(--muted)", padding: "3rem" }}>
             Aucun résultat pour cette recherche.
           </div>
         ) : (
@@ -95,35 +89,34 @@ export default function Medecins() {
               const badge = BADGE[m.categorie] || BADGE.medecin;
               return (
                 <div className="med-card" key={m._id}>
-                  <div
-                    className="med-avatar"
-                    style={{
-                      background: m.photo?.url ? "transparent" : m.avatarBg,
-                    }}
-                  >
+
+                  {/* Zone image */}
+                  <div className="med-img-wrap">
                     {m.photo?.url ? (
                       <img
                         src={m.photo.url}
                         alt={m.nom}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          borderRadius: "inherit",
-                        }}
+                        className="med-img"
                       />
                     ) : (
-                      m.avatar
+                      <div
+                        className="med-avatar-fallback"
+                        style={{ background: m.avatarBg }}
+                      >
+                        {m.avatar}
+                      </div>
                     )}
                     <span className={`med-badge ${badge.cls}`}>
                       {badge.label}
                     </span>
                   </div>
+
+                  {/* Infos */}
                   <div className="med-body">
                     <div className="med-name">{m.nom}</div>
                     <div className="med-spec">{m.specialite}</div>
                     <div className="med-addr">
-                      📍 {m.ville}, {m.adresse}
+                      📍 {m.gouvernorat || m.ville}, {m.adresse}
                     </div>
                     <div className="med-rating">
                       <Stars rating={m.rating} />
@@ -132,6 +125,7 @@ export default function Medecins() {
                       </span>
                     </div>
                   </div>
+
                   <button className="med-btn">Prendre RDV</button>
                 </div>
               );
