@@ -20,8 +20,8 @@ export default function Navbar() {
       <div className={`nav-links ${menuOpen ? 'open' : ''}`}>
         <button onClick={() => scrollTo('emission')}>L'Émission</button>
         <button onClick={() => scrollTo('candidature')}>Postuler</button>
-        <button onClick={() => scrollTo('medecins')}>Médecins</button>
-        <button onClick={() => scrollTo('boutique')}>Boutique</button>
+       <button onClick={() => scrollTo('medecins')}>Médecins</button>
+        {/* <button onClick={() => scrollTo('boutique')}>Boutique</button>*/} 
         <button onClick={() => scrollTo('episodes')}>Épisodes</button>
         <button
           className="nav-cta"
