@@ -27,7 +27,7 @@ export default function Navbar() {
           className="nav-cta"
           onClick={() => scrollTo('candidature')}
         >
-          Je Postule ✨
+          Je Postule
         </button>
       </div>
 
