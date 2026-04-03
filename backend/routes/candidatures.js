@@ -1,4 +1,4 @@
-// routes/candidatures.js
+// routes/candidatures.js — VERSION CORRIGÉE
 import { Router } from 'express';
 import { body, validationResult } from 'express-validator';
 import Candidature from '../models/Candidature.js';
@@ -8,7 +8,6 @@ import getCloudinary from '../config/cloudinary.js';
 
 const router = Router();
 
-// Helper : Multer dans une Promise pour capturer ses erreurs
 const runUpload = (req, res) =>
   new Promise((resolve, reject) => {
     getUpload().single('photo')(req, res, (err) => {
@@ -17,7 +16,6 @@ const runUpload = (req, res) =>
     });
   });
 
-// Validateurs express-validator (utilisés APRÈS runUpload)
 const candidatureValidators = [
   body('prenom').trim().notEmpty().withMessage('Le prénom est obligatoire'),
   body('age').isInt({ min: 18, max: 75 }).withMessage('Âge invalide (18-75)'),
@@ -38,15 +36,8 @@ const candidatureValidators = [
 
 // ─────────────────────────────────────────────────────────────────────────────
 // POST /api/candidatures
-// ORDRE OBLIGATOIRE :
-//   1. runUpload()           → Multer parse le multipart et remplit req.body
-//   2. candidatureValidators → express-validator lit req.body (maintenant plein)
-//   3. validationResult()    → on vérifie les erreurs
-//   4. logique métier
 // ─────────────────────────────────────────────────────────────────────────────
 router.post('/', async (req, res) => {
-
-  // ── 1. Upload photo : Multer parse multipart/form-data → remplit req.body ──
   try {
     await runUpload(req, res);
   } catch (uploadErr) {
@@ -60,21 +51,15 @@ router.post('/', async (req, res) => {
     return res.status(500).json({ success: false, message: `Erreur upload : ${uploadErr.message}` });
   }
 
-  // ── 2. Valider req.body manuellement (après que Multer l'a rempli) ──────────
-  // On exécute les validators express-validator à la main via .run(req)
   await Promise.all(candidatureValidators.map((validator) => validator.run(req)));
-
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log('❌ Validation errors:', errors.array());
-    // Nettoyer l'image déjà uploadée si validation échoue
     if (req.file?.filename) {
       await getCloudinary().uploader.destroy(req.file.filename).catch(() => {});
     }
     return res.status(400).json({ success: false, errors: errors.array() });
   }
 
-  // ── 3. Logique métier ────────────────────────────────────────────────────
   try {
     const existing = await Candidature.findOne({
       email: req.body.email,
@@ -102,7 +87,6 @@ router.post('/', async (req, res) => {
       data: { id: candidature._id },
     });
   } catch (err) {
-    console.error('❌ Erreur création candidature:', err.message);
     if (req.file?.filename) {
       await getCloudinary().uploader.destroy(req.file.filename).catch(() => {});
     }
@@ -112,21 +96,41 @@ router.post('/', async (req, res) => {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // GET /api/candidatures — Admin
+// FIX : limit=0 → renvoie TOUT (pas de .limit(0) sur Mongoose = tout)
+//       limit=N → pagination normale
 // ─────────────────────────────────────────────────────────────────────────────
 router.get('/', protect, adminOnly, async (req, res) => {
   try {
-    const { statut, saison, page = 1, limit = 20 } = req.query;
+    const { statut, saison, page = 1 } = req.query;
+
+    // limit=0 ou absent → on prend tout ; sinon on prend la valeur demandée
+    const limitParam = req.query.limit !== undefined ? Number(req.query.limit) : 50;
+    const showAll    = limitParam === 0;
+
     const filter = {};
     if (statut) filter.statut = statut;
     if (saison) filter.saison = Number(saison);
 
     const total = await Candidature.countDocuments(filter);
-    const candidatures = await Candidature.find(filter)
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * limit)
-      .limit(Number(limit));
 
-    res.json({ success: true, total, page: Number(page), pages: Math.ceil(total / limit), data: candidatures });
+    let query = Candidature.find(filter).sort({ createdAt: -1 });
+
+    if (!showAll) {
+      const pageNum = Number(page);
+      query = query.skip((pageNum - 1) * limitParam).limit(limitParam);
+    }
+
+    const candidatures = await query;
+
+    res.json({
+      success:    true,
+      total,
+      page:       showAll ? 1 : Number(page),
+      pages:      showAll ? 1 : Math.ceil(total / limitParam),
+      limit:      showAll ? total : limitParam,
+      showAll,
+      data:       candidatures,
+    });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -139,7 +143,9 @@ router.patch('/:id/statut', protect, adminOnly, async (req, res) => {
   try {
     const { statut } = req.body;
     const candidature = await Candidature.findByIdAndUpdate(
-      req.params.id, { statut }, { new: true, runValidators: true }
+      req.params.id,
+      { statut },
+      { new: true, runValidators: true }
     );
     if (!candidature)
       return res.status(404).json({ success: false, message: 'Candidature introuvable' });
