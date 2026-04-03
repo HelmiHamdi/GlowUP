@@ -2,9 +2,9 @@
 import { useState, useEffect } from 'react';
 import { candidatureAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import MedecinsAdmin   from '../components/MedecinsAdmin';
-import ProduitsAdmin   from '../components/ProduitsAdmin';
-import EpisodesAdmin   from '../components/EpisodesAdmin';
+import MedecinsAdmin from '../components/MedecinsAdmin';
+import ProduitsAdmin from '../components/ProduitsAdmin';
+import EpisodesAdmin from '../components/EpisodesAdmin';
 import './Admin.css';
 
 const STATUTS = ['en_attente', 'contactee', 'selectionnee', 'refusee'];
@@ -15,7 +15,8 @@ const STATUT_LABELS = {
   refusee:      { label: 'Refusée',      color: '#c97a5e' },
 };
 
-// Composant avatar réutilisable
+const LIMIT = 20;
+
 function CandidatureAvatar({ photo, prenom }) {
   const [imgError, setImgError] = useState(false);
 
@@ -37,7 +38,6 @@ function CandidatureAvatar({ photo, prenom }) {
     );
   }
 
-  // Fallback initiale si pas de photo
   return (
     <div
       style={{
@@ -62,24 +62,26 @@ function CandidatureAvatar({ photo, prenom }) {
 
 export default function Admin() {
   const { user, logout } = useAuth();
-  const [activeTab,     setActiveTab]     = useState('candidatures');
-  const [candidatures,  setCandidatures]  = useState([]);
-  const [loading,       setLoading]       = useState(true);
-  const [filterStatut,  setFilterStatut]  = useState('');
-  const [total,         setTotal]         = useState(0);
+  const [activeTab,    setActiveTab]    = useState('candidatures');
+  const [candidatures, setCandidatures] = useState([]);
+  const [loading,      setLoading]      = useState(true);
+  const [filterStatut, setFilterStatut] = useState('');
+  const [total,        setTotal]        = useState(0);
+  const [page,         setPage]         = useState(1);
+  const [totalPages,   setTotalPages]   = useState(1);
+  const [lightbox,     setLightbox]     = useState(null);
 
-  // ── Lightbox simple pour agrandir la photo ────────────────────────────────
-  const [lightbox, setLightbox] = useState(null); // URL de la photo à agrandir
-
-  const fetchCandidatures = async () => {
+  const fetchCandidatures = async (currentPage = 1) => {
     setLoading(true);
     try {
       const res = await candidatureAPI.getAll({
         statut: filterStatut || undefined,
-        limit: 50,
+        limit: LIMIT,
+        page: currentPage,
       });
       setCandidatures(res.data.data || []);
       setTotal(res.data.total || 0);
+      setTotalPages(res.data.pages || 1);
     } catch (err) {
       console.error(err);
     } finally {
@@ -88,8 +90,19 @@ export default function Admin() {
   };
 
   useEffect(() => {
-    if (activeTab === 'candidatures') fetchCandidatures();
+    if (activeTab === 'candidatures') {
+      setPage(1);
+      fetchCandidatures(1);
+    }
   }, [filterStatut, activeTab]);
+
+  const goToPage = (p) => {
+    setPage(p);
+    fetchCandidatures(p);
+    document
+      .querySelector('.admin-table-wrap')
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   const updateStatut = async (id, statut) => {
     try {
@@ -102,10 +115,23 @@ export default function Admin() {
     }
   };
 
+  const getPageNumbers = () => {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    if (page <= 4) {
+      return [1, 2, 3, 4, 5, '...', totalPages];
+    }
+    if (page >= totalPages - 3) {
+      return [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    }
+    return [1, '...', page - 1, page, page + 1, '...', totalPages];
+  };
+
   return (
     <div className="admin-page">
 
-      {/* ── Lightbox ──────────────────────────────────────────────────────── */}
+      {/* ── Lightbox ── */}
       {lightbox && (
         <div
           onClick={() => setLightbox(null)}
@@ -128,7 +154,7 @@ export default function Admin() {
         </div>
       )}
 
-      {/* ── Barre de navigation ───────────────────────────────────────────── */}
+      {/* ── Navbar ── */}
       <div className="admin-nav">
         <div className="admin-logo">🎋 BambooGlow Admin</div>
         <div className="admin-nav-right">
@@ -137,7 +163,7 @@ export default function Admin() {
         </div>
       </div>
 
-      {/* ── Onglets ───────────────────────────────────────────────────────── */}
+      {/* ── Onglets ── */}
       <div className="admin-tabs">
         {[
           { key: 'candidatures', icon: '📋', label: 'Candidatures' },
@@ -157,11 +183,13 @@ export default function Admin() {
 
       <div className="admin-content">
 
-        {/* ── Tab Candidatures ─────────────────────────────────────────────── */}
+        {/* ── Tab Candidatures ── */}
         {activeTab === 'candidatures' && (
           <>
             <div className="admin-header">
-              <h1>Candidatures <span>({total})</span></h1>
+              <h1>
+                Candidatures <span>({total})</span>
+              </h1>
               <div className="admin-filters">
                 <button
                   className={`filter-pill ${!filterStatut ? 'active' : ''}`}
@@ -186,68 +214,146 @@ export default function Admin() {
             ) : candidatures.length === 0 ? (
               <div className="admin-empty">Aucune candidature trouvée.</div>
             ) : (
-              <div className="admin-table-wrap">
-                <table className="admin-table">
-                  <thead>
-                    <tr>
-                      {/* Nouvelle colonne Photo */}
-                      <th>Photo</th>
-                      <th>Prénom</th>
-                      <th>Âge</th>
-                      <th>Email</th>
-                      <th>Téléphone</th>
-                      <th>Ville</th>
-                      <th>Motivation</th>
-                      <th>Date</th>
-                      <th>Statut</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {candidatures.map((c) => (
-                      <tr key={c._id}>
+              <>
+                {/* ── Info résumé ── */}
+                <div className="pagination-info">
+                  Affichage{' '}
+                  <strong>{(page - 1) * LIMIT + 1}</strong>–
+                  <strong>{Math.min(page * LIMIT, total)}</strong>{' '}
+                  sur <strong>{total}</strong> candidatures
+                  {totalPages > 1 && (
+                    <span className="pagination-info-pages">
+                      — page {page} / {totalPages}
+                    </span>
+                  )}
+                </div>
 
-                        {/* ── Colonne Photo ── */}
-                        <td>
-                          <div
-                            style={{ cursor: c.photo?.url ? 'zoom-in' : 'default' }}
-                            onClick={() => c.photo?.url && setLightbox(c.photo.url)}
-                            title={c.photo?.url ? 'Agrandir la photo' : 'Pas de photo'}
-                          >
-                            <CandidatureAvatar photo={c.photo} prenom={c.prenom} />
-                          </div>
-                        </td>
-
-                        <td className="td-name">{c.prenom}</td>
-                        <td>{c.age}</td>
-                        <td className="td-email">{c.email}</td>
-                        <td>{c.telephone}</td>
-                        <td>{c.ville}</td>
-                        <td className="td-motiv" title={c.motivation}>
-                          {c.motivation.slice(0, 60)}
-                          {c.motivation.length > 60 ? '…' : ''}
-                        </td>
-                        <td className="td-date">
-                          {new Date(c.createdAt).toLocaleDateString('fr-FR')}
-                        </td>
-                        <td>
-                          <select
-                            className="statut-select"
-                            value={c.statut}
-                            style={{ borderColor: STATUT_LABELS[c.statut]?.color }}
-                            onChange={(e) => updateStatut(c._id, e.target.value)}
-                          >
-                            {STATUTS.map((s) => (
-                              <option key={s} value={s}>
-                                {STATUT_LABELS[s].label}
-                              </option>
-                            ))}
-                          </select>
-                        </td>
+                {/* ── Tableau ── */}
+                <div className="admin-table-wrap">
+                  <table className="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Photo</th>
+                        <th>Prénom</th>
+                        <th>Âge</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>Ville</th>
+                        <th>Motivation</th>
+                        <th>Date</th>
+                        <th>Statut</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {candidatures.map((c) => (
+                        <tr key={c._id}>
+
+                          {/* Photo */}
+                          <td>
+                            <div
+                              style={{ cursor: c.photo?.url ? 'zoom-in' : 'default' }}
+                              onClick={() => c.photo?.url && setLightbox(c.photo.url)}
+                              title={c.photo?.url ? 'Agrandir la photo' : 'Pas de photo'}
+                            >
+                              <CandidatureAvatar photo={c.photo} prenom={c.prenom} />
+                            </div>
+                          </td>
+
+                          <td className="td-name">{c.prenom}</td>
+                          <td>{c.age}</td>
+                          <td className="td-email">{c.email}</td>
+                          <td>{c.telephone}</td>
+                          <td>{c.ville}</td>
+                          <td className="td-motiv" title={c.motivation}>
+                            {c.motivation?.slice(0, 60)}
+                            {c.motivation?.length > 60 ? '…' : ''}
+                          </td>
+                          <td className="td-date">
+                            {new Date(c.createdAt).toLocaleDateString('fr-FR')}
+                          </td>
+                          <td>
+                            <select
+                              className="statut-select"
+                              value={c.statut}
+                              style={{ borderColor: STATUT_LABELS[c.statut]?.color }}
+                              onChange={(e) => updateStatut(c._id, e.target.value)}
+                            >
+                              {STATUTS.map((s) => (
+                                <option key={s} value={s}>
+                                  {STATUT_LABELS[s].label}
+                                </option>
+                              ))}
+                            </select>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* ── Pagination ── */}
+                {totalPages > 1 && (
+                  <div className="pagination">
+
+                    {/* Première page */}
+                    <button
+                      className="pagination-btn pagination-arrow"
+                      onClick={() => goToPage(1)}
+                      disabled={page === 1}
+                      title="Première page"
+                    >
+                      «
+                    </button>
+
+                    {/* Précédent */}
+                    <button
+                      className="pagination-btn pagination-arrow"
+                      onClick={() => goToPage(page - 1)}
+                      disabled={page === 1}
+                      title="Page précédente"
+                    >
+                      ‹
+                    </button>
+
+                    {/* Numéros */}
+                    {getPageNumbers().map((p, i) =>
+                      p === '...' ? (
+                        <span key={`ellipsis-${i}`} className="pagination-ellipsis">
+                          …
+                        </span>
+                      ) : (
+                        <button
+                          key={p}
+                          className={`pagination-btn ${page === p ? 'active' : ''}`}
+                          onClick={() => goToPage(p)}
+                        >
+                          {p}
+                        </button>
+                      )
+                    )}
+
+                    {/* Suivant */}
+                    <button
+                      className="pagination-btn pagination-arrow"
+                      onClick={() => goToPage(page + 1)}
+                      disabled={page === totalPages}
+                      title="Page suivante"
+                    >
+                      ›
+                    </button>
+
+                    {/* Dernière page */}
+                    <button
+                      className="pagination-btn pagination-arrow"
+                      onClick={() => goToPage(totalPages)}
+                      disabled={page === totalPages}
+                      title="Dernière page"
+                    >
+                      »
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </>
         )}
