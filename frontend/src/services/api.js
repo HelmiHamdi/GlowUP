@@ -125,6 +125,8 @@ export const episodeAPI = {
   getAll:  (params)   => api.get('/episodes', { params }),
   create:  (data)     => api.post('/episodes', data),
   update:  (id, data) => api.put(`/episodes/${id}`, data),
+  syncViews: ()         => axios.get("/api/episodes/sync-views"),
+
 };
 
 export const authAPI = {

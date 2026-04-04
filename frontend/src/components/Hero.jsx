@@ -24,7 +24,7 @@ export default function Hero() {
         </g>
       </svg>
       <div className="hero-content">
-        <div className="hero-eyebrow">Émission YouTube · Transformation 360°</div>
+        <div className="hero-eyebrow">Émission YouTube · Transformation 180°</div>
         <div className="hero-title">Bamboo<span>Glow</span></div>
         <div className="hero-tagline">« Quand la vraie beauté reprend sa lumière. »</div>
         <div className="hero-sub">Dentiste · Médecin · Esthétique · Shopping · Révélation</div>
@@ -35,7 +35,7 @@ export default function Hero() {
         <div className="hero-stats">
           <div className="stat-item"><div className="stat-num">2</div><div className="stat-label">Saisons filmées</div></div>
           <div className="stat-item"><div className="stat-num">10</div><div className="stat-label">Épisodes</div></div>
-          <div className="stat-item"><div className="stat-num">360°</div><div className="stat-label">Transformation</div></div>
+          <div className="stat-item"><div className="stat-num">180°</div><div className="stat-label">Transformation</div></div>
           <div className="stat-item"><div className="stat-num">∞</div><div className="stat-label">Candidatures ouvertes</div></div>
         </div>
       </div>

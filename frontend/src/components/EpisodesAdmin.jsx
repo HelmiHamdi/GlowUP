@@ -35,7 +35,6 @@ const EMPTY_FORM = {
   publie: true,
 };
 
-/* ─── Extraire proprement l'ID YouTube peu importe le format ─ */
 function extractYoutubeId(input) {
   if (!input) return '';
   const trimmed = input.trim();
@@ -49,7 +48,6 @@ function extractYoutubeId(input) {
   return trimmed;
 }
 
-/* ─── Modale générique ─────────────────────────────────────── */
 function Modal({ open, onClose, children }) {
   useEffect(() => {
     const h = (e) => { if (e.key === 'Escape') onClose(); };
@@ -67,7 +65,6 @@ function Modal({ open, onClose, children }) {
   );
 }
 
-/* ─── Modale confirmation ──────────────────────────────────── */
 function ConfirmModal({ open, message, onConfirm, onCancel }) {
   if (!open) return null;
   return (
@@ -84,7 +81,6 @@ function ConfirmModal({ open, message, onConfirm, onCancel }) {
   );
 }
 
-/* ─── Composant principal ──────────────────────────────────── */
 export default function EpisodesAdmin() {
   const [episodes,     setEpisodes]     = useState([]);
   const [loading,      setLoading]      = useState(true);
@@ -99,13 +95,16 @@ export default function EpisodesAdmin() {
   const [confirmOpen,  setConfirmOpen]  = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
 
+  const [syncing,  setSyncing]  = useState(false);
+  const [syncMsg,  setSyncMsg]  = useState('');
+
   const fetchEpisodes = async () => {
     setLoading(true);
     try {
       const params = {};
       if (filterSaison) params.saison = filterSaison;
       const res = await episodeAPI.getAll(params);
-     setEpisodes(res.data.data || []);
+      setEpisodes(res.data.data || []);
     } catch (err) {
       console.error(err);
     } finally {
@@ -114,6 +113,22 @@ export default function EpisodesAdmin() {
   };
 
   useEffect(() => { fetchEpisodes(); }, [filterSaison]);
+
+  const handleSyncVues = async () => {
+    setSyncing(true);
+    setSyncMsg('');
+    try {
+      const res = await episodeAPI.syncViews();
+      await fetchEpisodes();
+      setSyncMsg('✅ ' + res.data.message);
+      setTimeout(() => setSyncMsg(''), 4000);
+    } catch (err) {
+      setSyncMsg('❌ Erreur : ' + (err?.response?.data?.message || err.message));
+      setTimeout(() => setSyncMsg(''), 5000);
+    } finally {
+      setSyncing(false);
+    }
+  };
 
   const openCreate = () => {
     setEditTarget(null);
@@ -149,10 +164,7 @@ export default function EpisodesAdmin() {
     }
     setSaving(true);
     setFormError('');
-
-    // ← Nettoyage automatique de l'ID YouTube (URL ou ID brut)
     const cleanYoutubeId = extractYoutubeId(form.youtubeId);
-
     const payload = {
       ...form,
       numero:    parseInt(form.numero) || 1,
@@ -160,7 +172,6 @@ export default function EpisodesAdmin() {
       vues:      parseInt(form.vues)   || 0,
       youtubeId: cleanYoutubeId,
     };
-
     try {
       if (editTarget) {
         const res = await episodeAPI.update(editTarget._id, payload);
@@ -209,6 +220,14 @@ export default function EpisodesAdmin() {
         .ea-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
         .ea-title{font-size:1.4rem;font-weight:700;color:#2d2d2d}
         .ea-title span{color:#aaa;font-size:1rem;font-weight:400;margin-left:.4rem}
+
+        .ea-top-actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+        .ea-sync-btn{background:linear-gradient(135deg,#4a9e7e,#2a7e5e);color:#fff;border:none;padding:.7rem 1.4rem;border-radius:8px;font-weight:600;cursor:pointer;font-size:.95rem;transition:opacity .2s}
+        .ea-sync-btn:hover{opacity:.85}
+        .ea-sync-btn:disabled{opacity:.55;cursor:not-allowed}
+        .ea-sync-msg{font-size:.82rem;padding:.45rem .85rem;border-radius:8px;background:#f0faf5;color:#2a7e5e;border:1px solid #b0ddc8}
+        .ea-sync-msg.err{background:#fff0ed;color:#c95e3a;border-color:#f5c5b5}
+
         .ea-add-btn{background:linear-gradient(135deg,#c8a96e,#a88040);color:#fff;border:none;padding:.7rem 1.4rem;border-radius:8px;font-weight:600;cursor:pointer;font-size:.95rem;transition:opacity .2s}
         .ea-add-btn:hover{opacity:.85}
 
@@ -241,8 +260,6 @@ export default function EpisodesAdmin() {
         .ea-btn-del:hover{background:rgba(201,94,58,.35)}
         .ea-yt-link{display:block;font-size:.7rem;color:#c8a96e;margin-top:.3rem;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
         .ea-yt-link:hover{text-decoration:underline}
-
-        /* Badge ID YouTube dans la carte */
         .ea-yt-id{display:inline-block;font-size:.68rem;font-family:monospace;background:rgba(200,169,110,.15);color:#c8a96e;padding:.15rem .45rem;border-radius:4px;margin-top:.3rem;letter-spacing:.03em}
 
         .ea-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem}
@@ -259,12 +276,8 @@ export default function EpisodesAdmin() {
         .ea-input,.ea-select,.ea-textarea{width:100%;padding:.6rem .9rem;border:1.5px solid #e0d8c8;border-radius:8px;font-size:.9rem;background:#fafaf8;outline:none;box-sizing:border-box;color:#333;font-family:inherit}
         .ea-input:focus,.ea-select:focus,.ea-textarea:focus{border-color:#c8a96e;background:#fff}
         .ea-textarea{resize:vertical;min-height:72px}
-
-        /* Hint champ YouTube ID */
         .ea-input-hint{font-size:.72rem;color:#aaa;margin-top:.25rem}
         .ea-input-hint strong{color:#c8a96e}
-
-        /* Prévisualisation ID nettoyé */
         .ea-yt-preview{margin-top:.4rem;font-size:.78rem;color:#7a9e7e;min-height:1.2em}
         .ea-yt-preview span{font-family:monospace;background:#f0faf0;padding:.1rem .4rem;border-radius:4px}
 
@@ -312,18 +325,39 @@ export default function EpisodesAdmin() {
         .ea-empty{text-align:center;color:#aaa;padding:3rem;font-size:1rem}
         .ea-spinner{text-align:center;padding:3rem;font-size:2rem}
 
-        @media(max-width:600px){.ea-form-grid{grid-template-columns:1fr}.ea-form-full{grid-column:1}}
+        @media(max-width:600px){
+          .ea-form-grid{grid-template-columns:1fr}
+          .ea-form-full{grid-column:1}
+          .ea-top-actions{width:100%}
+          .ea-sync-btn,.ea-add-btn{flex:1;text-align:center}
+        }
       `}</style>
 
-      {/* En-tête */}
+      {/* ── En-tête ── */}
       <div className="ea-top">
         <div className="ea-title">
           Épisodes <span>({episodes.length})</span>
         </div>
-        <button className="ea-add-btn" onClick={openCreate}>＋ Ajouter un épisode</button>
+        <div className="ea-top-actions">
+          {syncMsg && (
+            <span className={'ea-sync-msg' + (syncMsg.startsWith('❌') ? ' err' : '')}>
+              {syncMsg}
+            </span>
+          )}
+          <button
+            className="ea-sync-btn"
+            onClick={handleSyncVues}
+            disabled={syncing}
+          >
+            {syncing ? '⏳ Sync en cours…' : '🔄 Sync vues YouTube'}
+          </button>
+          <button className="ea-add-btn" onClick={openCreate}>
+            ＋ Ajouter un épisode
+          </button>
+        </div>
       </div>
 
-      {/* Filtres saison */}
+      {/* ── Filtres saison ── */}
       <div className="ea-filters">
         <button className={`ea-pill ${!filterSaison ? 'active' : ''}`} onClick={() => setFilterSaison('')}>
           Toutes saisons
@@ -335,7 +369,7 @@ export default function EpisodesAdmin() {
         ))}
       </div>
 
-      {/* Grille épisodes */}
+      {/* ── Grille épisodes ── */}
       {loading ? (
         <div className="ea-spinner">🎬</div>
       ) : episodes.length === 0 ? (
@@ -354,8 +388,10 @@ export default function EpisodesAdmin() {
               <div className="ea-card-body">
                 <div className="ea-card-title">{ep.titre}</div>
                 {ep.description && <div className="ea-card-desc">{ep.description}</div>}
+
+                {/* ✅ CORRIGÉ : balise <a> complète */}
                 {ep.youtubeId && (
-                  <>
+                  <div>
                     <span className="ea-yt-id">▶ {ep.youtubeId}</span>
                     <a
                       className="ea-yt-link"
@@ -365,8 +401,9 @@ export default function EpisodesAdmin() {
                     >
                       Ouvrir sur YouTube ↗
                     </a>
-                  </>
+                  </div>
                 )}
+
                 <div className="ea-card-meta">
                   <span className="ea-vues">👁 {ep.vues.toLocaleString()} vues</span>
                   <div className="ea-publie-toggle" onClick={() => togglePublie(ep)}>
@@ -386,9 +423,9 @@ export default function EpisodesAdmin() {
         </div>
       )}
 
-      {/* Modal Ajout / Modification */}
+      {/* ── Modal Ajout / Modification ── */}
       <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
-        <h2>{editTarget ? '✏️ Modifier l\'épisode' : '➕ Ajouter un épisode'}</h2>
+        <h2>{editTarget ? "✏️ Modifier l'épisode" : '➕ Ajouter un épisode'}</h2>
         <div className="ea-form-grid">
 
           <div>
@@ -421,7 +458,6 @@ export default function EpisodesAdmin() {
               placeholder="Courte description de l'épisode…" />
           </div>
 
-          {/* YouTube ID — accepte URL complète ou ID brut */}
           <div className="ea-form-full">
             <label className="ea-label">YouTube ID ou URL</label>
             <input className="ea-input" value={form.youtubeId}
@@ -430,7 +466,6 @@ export default function EpisodesAdmin() {
             <div className="ea-input-hint">
               Collez l'URL complète <strong>ou</strong> juste l'ID (11 caractères après <strong>?v=</strong>)
             </div>
-            {/* Aperçu de l'ID nettoyé */}
             {form.youtubeId && (
               <div className="ea-yt-preview">
                 ✅ ID détecté : <span>{extractYoutubeId(form.youtubeId)}</span>
@@ -513,7 +548,7 @@ export default function EpisodesAdmin() {
                 <span className="ea-preview-dur">{form.duree || '00:00'}</span>
               </div>
               <div className="ea-preview-body">
-                <div className="ea-preview-title">{form.titre || 'Titre de l\'épisode…'}</div>
+                <div className="ea-preview-title">{form.titre || "Titre de l'épisode…"}</div>
               </div>
             </div>
           </div>

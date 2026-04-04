@@ -3,8 +3,8 @@ import { episodeAPI } from '../services/api';
 import './Episodes.css';
 
 function formatVues(n) {
-  if (n >= 1000) return `${(n / 1000).toFixed(1)}K vues`;
-  return `${n} vues`;
+  // Affiche le nombre exact avec séparateur de milliers (ex: 3 531 vues)
+  return `${Number(n).toLocaleString('fr-FR')} vues`;
 }
 
 function timeAgo(date) {
@@ -131,7 +131,7 @@ export default function Episodes() {
                   <div className="yt-body">
                     <div className="yt-title">{ep.titre}</div>
                     <div className="yt-meta">
-                      <span className="yt-views">{formatVues(ep.vues)}</span>
+                      <span className="yt-views">👁 {formatVues(ep.vues)}</span>
                       <span className="yt-date">{timeAgo(ep.datePublication)}</span>
                     </div>
                     {!ep.youtubeId && (
